@@ -49,6 +49,42 @@ def remplaceDET(tag, y, lemma):
             if "le" in pos[i:fin+1]:
                 syntagme="SN_def"
         """
+"""Proposition de Maria
+def type_multiword(tag, y, end):
+    syntagme=""
+    if 'NOUN' in tag[y:end+1]:
+            if "le" in tag[y:end+1][0]: #Pour déterminer quel type de syntagme c'est, on commence par voir quel est le mot qu'on a au début 
+                syntagme="SN_def"
+            elif "un" in tag[y:end+1][0]:  
+                syntagme="SN_ind"
+            elif "son" in tag[y:end+1][0]:
+                syntagme="SN_pos"
+            elif "ce" in tag[y:end+1][0]:
+                syntagme="SN_dem"
+            elif "PRON" in tag[y:end+1][0]:
+                syntagme="Pro"
+            elif 'NOUN' in tag[y:end+1][0]:
+                syntagme="SN_sansDET"
+            else:
+                syntagme="Autre"
+    else:
+        syntagme="Autre"
+        
+    return syntagme
+                
+def type_motseul(tag, y):
+    syntagme=""
+    if 'NOUN' in tag[y]:
+        syntagme="SN_sansDET"
+    elif 'PRON' in tag[y]:
+        syntagme="Pro"
+    elif 'PROPN' in tag[y]:
+        syntagme="NPP"  
+    else:
+        syntagme="Autre"
+    
+    return syntagme"""
+
 Nb=1 
 
             
