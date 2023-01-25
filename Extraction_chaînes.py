@@ -1,0 +1,135 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Jan 13 12:01:52 2023
+COMMANDE: python3 Extraction_chaînes.py $NOM DU FICHIER .CONLL
+"""
+import sys
+import re
+import glob
+
+
+fichier=sys.argv[1]
+
+try:
+    entree=open(fichier,"r")
+#IOError : exception lancée lorsqu'il s'avère impossible d'ouvrir un fichier 
+except IOError:
+    print("Erreur lors de l'ouverture du fichier : "+fichier)
+    exit()
+
+text_id=[]
+pos=[]
+lemme=[]
+maillon=[]
+chaine0=[]
+chaine1=[]
+chaine2=[]
+chaine_id=dict()
+long=[]
+#
+sortie = open('chaines_Resolco.csv', 'w')
+sortie.write("CT"+"\t"+"ID TEXT"+"\t"+"NB CHAINE"+"\t"+"LONGUEUR"+"\t"+(("Maillon"+"\t")*63)+"\n")
+ 
+def tocsv(chaine,nb,liste_id,x): 
+    sortie.write("CT_"+str(nb)+"\t"+str(liste_id[0])+"\t"+str(x)+"\t"+str(len(chaine))+"\t") 
+    for element in chaine:
+        sortie.write(str(element)+"\t")
+    sortie.write("\n")     
+
+
+
+def remplaceDET(tag, y, lemma):
+    if tag[y]=="DET":
+        tag[y]=lemma[y]
+
+"""A FAIRE:
+    créer une fonction qui permet de transformer les pos et les tranches de listes de pos (pos[i:fin+1]) en différentes étiquettes:
+        P.ex if 'NOUN' in pos[i:fin+1]:
+            if "le" in pos[i:fin+1]:
+                syntagme="SN_def"
+        """
+Nb=1 
+
+            
+for ligne in entree:
+    ligne=ligne.rstrip("\n")
+    if len(ligne)>0: #On saute les lignes vides entre les phrases
+        x=ligne.split("\t") 
+        
+        #Si la ligne contient 13 colonnes
+        if len(x)==13:
+            text_id.append(x[0])
+            pos.append(x[4])
+            lemme.append(x[6])
+            maillon.append(x[12])
+
+        elif x[0]=="#end document": #Le texte est fini, on commence à stocker
+
+            #print(text_id[0])
+            for i in range(0, len(text_id)):
+                if re.search(r'\|?\(0\)\|?', maillon[i]): #si la chiffre en entourée par parenthèses, alors on stocke le pos dans la liste
+                    remplaceDET(pos,i, lemme)
+                    chaine0.append(pos[i])
+
+                elif re.search(r'\(0', maillon[i]):
+                    remplaceDET(pos,i, lemme)
+                    
+                    fin=i+1
+                    while fin<len(text_id) and not '0)' in maillon[fin]: #S'il n'ya qu'une parenthèse ouvrante, alors on stocke 
+                        remplaceDET(pos,fin, lemme)
+                        fin=fin+1
+                    chaine0.append(pos[i:fin+1])  
+#            print("chaine 0", len(chaine0), chaine0)
+            if len(chaine0)>0:
+                tocsv(chaine0, Nb,text_id, "0")
+                Nb=Nb+1
+            
+            for i in range(0, len(text_id)):
+  
+                if re.search(r'\|?\(1\)\|?', maillon[i]):
+                    remplaceDET(pos,i, lemme)
+                    chaine1.append(pos[i])
+
+                elif re.search(r'\(1', maillon[i]):
+                    remplaceDET(pos,i, lemme)
+                    #print(maillon[i])
+                    fin=i+1
+                    while fin<len(text_id) and not '1)' in maillon[fin]:
+                        remplaceDET(pos,fin, lemme)    
+                        fin=fin+1   
+                    chaine1.append(pos[i:fin+1])
+#            print("chaine 1", len(chaine1), chaine1)
+            if len(chaine1)>0:
+                tocsv(chaine1,Nb, text_id, "1")
+                Nb=Nb+1
+
+            for i in range(0, len(text_id)):
+                if re.search(r'\|?\(2\)\|?', maillon[i]):
+                    remplaceDET(pos,i, lemme)
+                    chaine2.append(pos[i])
+#
+                elif re.search(r'\(2', maillon[i]):
+                    remplaceDET(pos,i, lemme)
+                    fin=i+1
+                    while fin<len(text_id) and not '2)' in maillon[fin]:
+                        remplaceDET(pos,fin, lemme)    
+                        fin=fin+1
+                    chaine2.append(pos[i:fin+1]) 
+                    
+#            print("chaine 2", len(chaine2), chaine2)
+            if len(chaine2)>0:
+                tocsv(chaine2,Nb, text_id, "2")
+                Nb=Nb+1
+           
+            #On vide les listes pour traiter le texte suivant ensuite    
+            text_id=[]
+            pos=[]
+            lemme=[]
+            maillon=[]
+            chaine0=[]
+            chaine1=[]
+            chaine2=[]
+
+    
+
