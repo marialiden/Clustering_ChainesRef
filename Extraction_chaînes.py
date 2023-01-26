@@ -25,7 +25,6 @@ maillon=[]
 chaine0=[]
 chaine1=[]
 chaine2=[]
-chaine_id=dict()
 long=[]
 #
 sortie = open('chaines_Resolco.csv', 'w')
@@ -55,7 +54,7 @@ def type_multiword(tag, y, end):
     if 'NOUN' in tag[y:end+1]:
             if "le" in tag[y:end+1][0]: #Pour déterminer quel type de syntagme c'est, on commence par voir quel est le mot qu'on a au début 
                 syntagme="SN_def"
-            elif "un" in tag[y:end+1][0]:  
+            elif "un" or "NUM" in tag[y:end+1][0]:  
                 syntagme="SN_ind"
             elif "son" in tag[y:end+1][0]:
                 syntagme="SN_pos"
