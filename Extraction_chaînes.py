@@ -18,6 +18,7 @@ except IOError:
     print("Erreur lors de l'ouverture du fichier : "+fichier)
     exit()
 
+    #Liste qui se réinitialisent à chaque nouveau texte. 
 text_id=[]
 pos=[]
 lemme=[]
@@ -25,11 +26,12 @@ maillon=[]
 chaine0=[]
 chaine1=[]
 chaine2=[]
-long=[]
-#
+
+#Création d'une sortie, un csv.
 sortie = open('chaines_Resolco.csv', 'w')
 sortie.write("CT"+"\t"+"ID TEXT"+"\t"+"NB CHAINE"+"\t"+"LONGUEUR"+"\t"+(("Maillon"+"\t")*63)+"\n")
  
+#Fonction qui remplit le fichier csv 
 def tocsv(chaine,nb,liste_id,x): 
     sortie.write("CT_"+str(nb)+"\t"+str(liste_id[0])+"\t"+str(x)+"\t"+str(len(chaine))+"\t") 
     for element in chaine:
@@ -37,7 +39,7 @@ def tocsv(chaine,nb,liste_id,x):
     sortie.write("\n")     
 
 
-
+# Fonction qui remplace le postag avec son lemme si c'est un DET
 def remplaceDET(tag, y, lemma):
     if tag[y]=="DET":
         tag[y]=lemma[y]
@@ -84,8 +86,8 @@ def type_motseul(tag, y):
     
     return syntagme"""
 
+#Compteur qui commence par 1 et augmente par 1 à chaque nouvelle chaîne
 Nb=1 
-
             
 for ligne in entree:
     ligne=ligne.rstrip("\n")
