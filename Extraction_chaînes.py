@@ -50,13 +50,15 @@ def remplaceDET(tag, y, lemma):
             if "le" in pos[i:fin+1]:
                 syntagme="SN_def"
         """
+
 """Proposition de Maria
-def type_multiword(tag, y, end):
+
+def type_multiword(tag, y, end): #Fonction pour traiter les maillons contenant plrs mots
     syntagme=""
     if 'NOUN' in tag[y:end+1]:
             if "le" in tag[y:end+1][0]: #Pour déterminer quel type de syntagme c'est, on commence par voir quel est le mot qu'on a au début 
                 syntagme="SN_def"
-            elif "un" or "NUM" in tag[y:end+1][0]:  
+            elif "un" or 'NUM' in tag[y:end+1][0]:  
                 syntagme="SN_ind"
             elif "son" in tag[y:end+1][0]:
                 syntagme="SN_pos"
@@ -69,11 +71,14 @@ def type_multiword(tag, y, end):
             else:
                 syntagme="Autre"
     else:
-        syntagme="Autre"
+        if 'VERB' in tag[y]:
+            syntagme="Sujet zéro"
+        else:
+            syntagme="Autre"
         
     return syntagme
                 
-def type_motseul(tag, y):
+def type_motseul(tag, y): #Fonction pour traiter les maillons contenant un seul mot
     syntagme=""
     if 'NOUN' in tag[y]:
         syntagme="SN_sansDET"
@@ -81,6 +86,10 @@ def type_motseul(tag, y):
         syntagme="Pro"
     elif 'PROPN' in tag[y]:
         syntagme="NPP"  
+    elif 'son' in tag[y]:
+        syntagme="Pos"
+    elif 'VERB' in tag[y]:
+        syntagme="Sujet zéro"
     else:
         syntagme="Autre"
     
@@ -118,7 +127,7 @@ for ligne in entree:
                         fin=fin+1
                     chaine0.append(pos[i:fin+1])  
 #            print("chaine 0", len(chaine0), chaine0)
-            if len(chaine0)>0:
+            if len(chaine0)>1: #On ne prend pas en compte les chaînes avec 1 seul maillon
                 tocsv(chaine0, Nb,text_id, "0")
                 Nb=Nb+1
             
@@ -137,7 +146,7 @@ for ligne in entree:
                         fin=fin+1   
                     chaine1.append(pos[i:fin+1])
 #            print("chaine 1", len(chaine1), chaine1)
-            if len(chaine1)>0:
+            if len(chaine1)>1:#On ne prend pas en compte les chaînes avec 1 seul maillon
                 tocsv(chaine1,Nb, text_id, "1")
                 Nb=Nb+1
 
@@ -155,7 +164,7 @@ for ligne in entree:
                     chaine2.append(pos[i:fin+1]) 
                     
 #            print("chaine 2", len(chaine2), chaine2)
-            if len(chaine2)>0:
+            if len(chaine2)>1: #On ne prend pas en compte les chaînes avec 1 seul maillon
                 tocsv(chaine2,Nb, text_id, "2")
                 Nb=Nb+1
            
