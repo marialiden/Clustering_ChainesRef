@@ -51,7 +51,7 @@ def remplaceDET(tag, y, lemma):
                 syntagme="SN_def"
         """
 
-"""Proposition de Maria
+"""Proposition de Maria"""
 
 def type_multiword(tag, y, end): #Fonction pour traiter les maillons contenant plrs mots
     syntagme=""
@@ -93,7 +93,7 @@ def type_motseul(tag, y): #Fonction pour traiter les maillons contenant un seul 
     else:
         syntagme="Autre"
     
-    return syntagme"""
+    return syntagme
 
 #Compteur qui commence par 1 et augmente par 1 à chaque nouvelle chaîne
 Nb=1 
@@ -116,7 +116,7 @@ for ligne in entree:
             for i in range(0, len(text_id)):
                 if re.search(r'\|?\(0\)\|?', maillon[i]): #si la chiffre en entourée par parenthèses, alors on stocke le pos dans la liste
                     remplaceDET(pos,i, lemme)
-                    chaine0.append(pos[i])
+                    chaine0.append(type_motseul(pos,i))
 
                 elif re.search(r'\(0', maillon[i]):
                     remplaceDET(pos,i, lemme)
@@ -125,7 +125,7 @@ for ligne in entree:
                     while fin<len(text_id) and not '0)' in maillon[fin]: #S'il n'ya qu'une parenthèse ouvrante, alors on stocke 
                         remplaceDET(pos,fin, lemme)
                         fin=fin+1
-                    chaine0.append(pos[i:fin+1])  
+                    chaine0.append(type_multiword(pos, i, fin))  
 #            print("chaine 0", len(chaine0), chaine0)
             if len(chaine0)>1: #On ne prend pas en compte les chaînes avec 1 seul maillon
                 tocsv(chaine0, Nb,text_id, "0")
@@ -135,7 +135,7 @@ for ligne in entree:
   
                 if re.search(r'\|?\(1\)\|?', maillon[i]):
                     remplaceDET(pos,i, lemme)
-                    chaine1.append(pos[i])
+                    chaine1.append(type_motseul(pos,i))
 
                 elif re.search(r'\(1', maillon[i]):
                     remplaceDET(pos,i, lemme)
@@ -144,7 +144,7 @@ for ligne in entree:
                     while fin<len(text_id) and not '1)' in maillon[fin]:
                         remplaceDET(pos,fin, lemme)    
                         fin=fin+1   
-                    chaine1.append(pos[i:fin+1])
+                    chaine1.append(type_multiword(pos, i, fin))
 #            print("chaine 1", len(chaine1), chaine1)
             if len(chaine1)>1:#On ne prend pas en compte les chaînes avec 1 seul maillon
                 tocsv(chaine1,Nb, text_id, "1")
@@ -153,7 +153,7 @@ for ligne in entree:
             for i in range(0, len(text_id)):
                 if re.search(r'\|?\(2\)\|?', maillon[i]):
                     remplaceDET(pos,i, lemme)
-                    chaine2.append(pos[i])
+                    chaine2.append(type_motseul(pos,i))
 #
                 elif re.search(r'\(2', maillon[i]):
                     remplaceDET(pos,i, lemme)
@@ -161,7 +161,7 @@ for ligne in entree:
                     while fin<len(text_id) and not '2)' in maillon[fin]:
                         remplaceDET(pos,fin, lemme)    
                         fin=fin+1
-                    chaine2.append(pos[i:fin+1]) 
+                    chaine2.append(type_multiword(pos, i, fin)) 
                     
 #            print("chaine 2", len(chaine2), chaine2)
             if len(chaine2)>1: #On ne prend pas en compte les chaînes avec 1 seul maillon
