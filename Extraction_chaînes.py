@@ -61,7 +61,7 @@ def type_multiword(tag, y, end): #Fonction pour traiter les maillons contenant p
             elif "un" or 'NUM' in tag[y:end+1][0]:  
                 syntagme="SN_ind"
             elif "son" in tag[y:end+1][0]:
-                syntagme="SN_pos"
+                syntagme="pos"
             elif "ce" in tag[y:end+1][0]:
                 syntagme="SN_dem"
             elif "PRON" in tag[y:end+1][0]:
