@@ -18,14 +18,14 @@ except IOError:
     print("Erreur lors de l'ouverture du fichier : "+fichier)
     exit()
 
-    #Liste qui se réinitialisent à chaque nouveau texte. 
-text_id=[]
-pos=[]
-lemme=[]
-maillon=[]
-chaine0=[]
-chaine1=[]
-chaine2=[]
+#Listes qui se réinitialisent à chaque nouveau texte. 
+text_id=[] #Pour l'identifiant du texte
+pos=[] #pour les pos tags
+lemme=[] #pour les lemmes
+maillon=[] #pour le nb de maillon (0,1 ou 2)
+chaine0=[] #pour la chaîne 0
+chaine1=[]  #pour la chaîne 1
+chaine2=[]  #pour la chaîne 2
 
 #Création d'une sortie, un csv.
 sortie = open('chaines_Resolco.csv', 'w')
@@ -44,18 +44,9 @@ def remplaceDET(tag, y, lemma):
     if tag[y]=="DET":
         tag[y]=lemma[y]
 
-"""A FAIRE:
-    créer une fonction qui permet de transformer les pos et les tranches de listes de pos (pos[i:fin+1]) en différentes étiquettes:
-        P.ex if 'NOUN' in pos[i:fin+1]:
-            if "le" in pos[i:fin+1]:
-                syntagme="SN_def"
-        """
-
-"""Proposition de Maria"""
-
 def type_multiword(tag, y, end): #Fonction pour traiter les maillons contenant plrs mots
     syntagme=""
-    if 'NOUN' in tag[y:end+1]:
+    if 'NOUN' in tag[y:end+1]: #D'abord on regarde s'il y a un nom dedans
             if "le" in tag[y:end+1][0]: #Pour déterminer quel type de syntagme c'est, on commence par voir quel est le mot qu'on a au début 
                 syntagme="SN_def"
             elif "un" or 'NUM' in tag[y:end+1][0]:  
@@ -77,7 +68,8 @@ def type_multiword(tag, y, end): #Fonction pour traiter les maillons contenant p
             syntagme="Autre"
         
     return syntagme
-                
+
+
 def type_motseul(tag, y): #Fonction pour traiter les maillons contenant un seul mot
     syntagme=""
     if 'NOUN' in tag[y]:
