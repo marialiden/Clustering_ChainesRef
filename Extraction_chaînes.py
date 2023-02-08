@@ -29,7 +29,7 @@ chaine2=[]  #pour la chaîne 2
 
 #Création d'une sortie, un csv.
 sortie = open('chaines_Resolco.csv', 'w')
-sortie.write("CT"+"\t"+"ID TEXT"+"\t"+"NB CHAINE"+"\t"+"LONGUEUR"+"\t"+(("Maillon"+"\t")*63)+"\n")
+sortie.write("CT"+"\t"+"CORPUS"+"\t"+"NB CHAINE"+"\t"+"LONGUEUR"+"\t"+(("Maillon"+"\t")*63)+"\n")
  
 #Fonction qui remplit le fichier csv 
 def tocsv(chaine,nb,liste_id,x): 
